@@ -6,6 +6,7 @@ import initApiRoutes from "./routes/api";
 import configCors from "./config/cors";
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
+import { configPassport } from "./controller/passportController";
 // import connection from "./config/connectDB";
 
 const app = express();
@@ -31,6 +32,8 @@ app.use(cookieParser());
 //init web routes
 initWebRoutes(app);
 initApiRoutes(app);
+
+configPassport();
 
 //req => middleware => res
 app.use((req, res) => {
