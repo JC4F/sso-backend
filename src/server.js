@@ -7,6 +7,7 @@ import configCors from "./config/cors";
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import { configPassport } from "./controller/passportController";
+import configSession from "./config/session";
 // import connection from "./config/connectDB";
 
 const app = express();
@@ -25,6 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //config cookie -parser
 app.use(cookieParser());
 
+configSession(app);
 //test connection db
 // connection();
 
@@ -33,12 +35,12 @@ app.use(cookieParser());
 initWebRoutes(app);
 initApiRoutes(app);
 
-configPassport();
-
 //req => middleware => res
 app.use((req, res) => {
     return res.send('404 not found')
 })
+
+configPassport();
 
 app.listen(PORT, () => {
     console.log(">>> JWT Backend is running on the port = " + PORT);

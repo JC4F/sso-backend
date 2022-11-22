@@ -10,7 +10,6 @@ const configPassport = ()=>{
         }
 
         let res = await loginRegisterService.handleUserLogin(rawData)
-        console.log("res>>>", res)
         if(res && res.EC===0){
             return cb(null, res.DT)
         } else {
