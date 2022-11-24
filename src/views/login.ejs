@@ -44,16 +44,19 @@
         $("#btnLogin").on('click', function(){
             const username = $('#username').val();
             const password = $('#password').val();
+            const serviceURL = $('#redirectURL').val();
+
             $('#flashMsg').empty("");
 
             $.ajax({
                 type: "POST",
                 url: `${window.location.origin}/login`,
-                data: {username, password},
+                data: {username, password, serviceURL},
                 withCredentials: true,
                 success: function(data){
                     $('#flashMsg').addClass('none-flash');
-                    window.location.href="/";
+                    const redirectURL = `${data.redirectURL}/code?ssoToken=${data.code}`
+                    window.location.href=redirectURL;
                 },
                 error: function(request, status, error){
                     $('#passpord').val("");
@@ -68,7 +71,7 @@
 <body>
     <div class="container">
         <div class="row">
-
+                <input type="hidden" id="redirectURL" value="<%= redirectURL %>">
                 <div class="login-container col-6 mx-auto">
                     <fieldset class="border rounded-3 p-3">
                         <legend class="float-none w-auto px-3">Login Form:</legend>
