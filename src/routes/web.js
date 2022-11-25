@@ -39,9 +39,7 @@ const initWebRoutes = (app) => {
     //rest api
     //GET - R, POST- C, PUT - U, DELETE - D
     router.get("/api/test-api", apiController.testApi);
-
     router.get("/login", checkUser.isLogin, loginController.getLoginPage);
-
     router.post('/login', function(req, res, next){
       passport.authenticate('local', function(error, user, info){
         if(error){
@@ -58,10 +56,17 @@ const initWebRoutes = (app) => {
         });
       })(req, res, next);
     });
-
     router.post('/logout', passController.handleLogout);
-
     router.post('/verify-token', loginController.verifySSOToken);
+
+    router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+    router.get('/google/redirect', 
+      passport.authenticate('google', { failureRedirect: '/login' }),
+      function(req, res) {
+        // Successful authentication, redirect home.
+        console.log(">>> check req.user:", req.user)
+        res.redirect('/');
+    });
 
     return app.use("/", router);
 }
