@@ -61,6 +61,8 @@ const initWebRoutes = (app) => {
 
     router.post('/logout', passController.handleLogout);
 
+    router.post('/verify-token', loginController.verifySSOToken);
+
     return app.use("/", router);
 }
 

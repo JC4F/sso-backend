@@ -97,7 +97,7 @@ const handleUserLogin = async (rawData) => {
             let isCorrectPassword = checkPassword(rawData.password, user.password);
             if (isCorrectPassword === true) {
                 const code = uuidv4();
-                // let groupWithRoles = await getGroupWithRoles(user);
+                let groupWithRoles = await getGroupWithRoles(user);
                 // let payload = {
                 //     email: user.email,
                 //     groupWithRoles,
@@ -108,11 +108,11 @@ const handleUserLogin = async (rawData) => {
                     EM: 'ok!',
                     EC: 0,
                     DT: {
-                        code
+                        code,
+                        email: user.email,
+                        groupWithRoles,
+                        username: user.username
                         // access_token: token,
-                        // groupWithRoles,
-                        // email: user.email,
-                        // username: user.username
                     }
                 }
             }
@@ -135,6 +135,20 @@ const handleUserLogin = async (rawData) => {
     }
 }
 
+const updateUserRefreshToken = async(email, token) => {
+    try {
+        console.log("email: ", email, "token: ", token)
+        let a = await db.User.update(
+            {refreshToken: token},
+            {
+                where: {email: email.trim()}
+            }
+        );
+    }catch(err){
+        console.log(">>> error: ", err);
+    }
+}
+
 module.exports = {
-    registerNewUser, handleUserLogin, hashUserPassword, checkEmailExist, checkPhoneExist
+    registerNewUser, handleUserLogin, hashUserPassword, checkEmailExist, checkPhoneExist, updateUserRefreshToken
 }
