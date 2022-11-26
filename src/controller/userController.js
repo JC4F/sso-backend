@@ -96,7 +96,7 @@ const getUserAccount = async (req, res) => {
                 username: req.user.username
             }
         })
-    }, 1000)
+    }, 0)
 }
 module.exports = {
     readFunc, createFunc, updateFunc, deleteFunc, getUserAccount
