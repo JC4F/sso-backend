@@ -76,6 +76,10 @@ const initWebRoutes = (app) => {
         return res.render('social.ejs', {ssoToken: req.user.code})
     });
 
+    router.get('/forgot-password', (req, res)=>{
+      return res.render('forgot-password.ejs');
+    })
+
     return app.use("/", router);
 }
 
