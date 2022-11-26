@@ -3,7 +3,6 @@ import db from '../models/index';
 import bcrypt from 'bcryptjs';
 import { Op } from 'sequelize';
 import { getGroupWithRoles } from './JWTService';
-import { createJWT } from '../middleware/JWTAction';
 import {v4 as uuidv4} from 'uuid'
 
 const salt = bcrypt.genSaltSync(10);
@@ -177,7 +176,28 @@ const upsertSocialMedia = async(typeAcc, dataRaw) => {
     }
 }
 
+const getUserByRefreshToken = async(token)=>{
+    try {
+        let user = await db.User.findOne({
+            where: {
+                refreshToken: token
+            }
+        })
+        if(user){
+            let groupWithRoles = await getGroupWithRoles(user);
+            return {
+                email: user.email,
+                groupWithRoles,
+                username: user.username
+            }
+        }
+        return null;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     registerNewUser, handleUserLogin, hashUserPassword, checkEmailExist, 
-    checkPhoneExist, updateUserRefreshToken, upsertSocialMedia
+    checkPhoneExist, updateUserRefreshToken, upsertSocialMedia, getUserByRefreshToken
 }
