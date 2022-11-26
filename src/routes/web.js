@@ -48,10 +48,10 @@ const initWebRoutes = (app) => {
         if(!user){
           return res.status(401).json(info.message);
         }
-
+        // console.log(">>>user: ", user, ">>>info: ", info);
         req.login(user, function(err){
           if(err) return next(err);
-
+          // console.log(">>>user in login: ", user)
           return res.status(200).json({...user, redirectURL: req.body.serviceURL});
         });
       })(req, res, next);
@@ -64,8 +64,7 @@ const initWebRoutes = (app) => {
       passport.authenticate('google', { failureRedirect: '/login' }),
       function(req, res) {
         // Successful authentication, redirect home.
-        console.log(">>> check req.user:", req.user)
-        res.redirect('/');
+        return res.render('social.ejs', {ssoToken: req.user.code})
     });
 
     return app.use("/", router);

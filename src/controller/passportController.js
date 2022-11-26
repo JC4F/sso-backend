@@ -14,6 +14,7 @@ const configPassport = ()=>{
 
         let res = await loginRegisterService.handleUserLogin(rawData)
         if(res && res.EC===0){
+            // console.log(">>>res.DT: ", res.DT)
             return done(null, res.DT)
         } else {
             return done(null, false, {message: res.EM})

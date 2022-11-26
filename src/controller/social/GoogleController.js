@@ -1,6 +1,7 @@
 require('dotenv').config();
 import passport from 'passport';
 import loginRegisterService from '../../service/loginRegisterService'
+import {v4 as uuidv4} from 'uuid';
 
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
@@ -19,6 +20,7 @@ const configLoginWithGoogle = ()=>{
             googleId: profile.id
         }
         let user = await loginRegisterService.upsertSocialMedia(typeAcc, dataRaw)
+        user.code = uuidv4();
         return cb(null, user);
       }
     ));

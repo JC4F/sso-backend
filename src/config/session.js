@@ -43,12 +43,14 @@ const configSession = (app)=>{
     passport.serializeUser(function(user, cb) {
       process.nextTick(function() {
         // cb(null, { id: user.id, username: user.username });
+        // console.log(">>>serial: ", user)
         cb(null, user);
       });
     });
     
     passport.deserializeUser(function(user, cb) {
       process.nextTick(function() {
+        // console.log(">>>deserial: ", user)
         return cb(null, user);
       });
     });
