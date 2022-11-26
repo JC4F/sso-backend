@@ -152,25 +152,23 @@ const updateUserRefreshToken = async(email, token) => {
 const upsertSocialMedia = async(typeAcc, dataRaw) => {
     try {
         let user = null;
-        if(typeAcc === 'GOOGLE'){
-            user = await db.User.findOne({
-                where: {
-                    email: dataRaw.email,
-                    type: typeAcc
-                },
-                //return js object instead of raw value
-                raw: true
-            })
+        user = await db.User.findOne({
+            where: {
+                email: dataRaw.email,
+                type: typeAcc
+            },
+            //return js object instead of raw value
+            raw: true
+        })
 
-            if(!user){
-                //create a new user
-                user = await db.User.create({
-                    email: dataRaw.email,
-                    username: dataRaw.username,
-                    type: typeAcc
-                })
-                user = user.get({plain: true});
-            }
+        if(!user){
+            //create a new user
+            user = await db.User.create({
+                email: dataRaw.email,
+                username: dataRaw.username,
+                type: typeAcc
+            })
+            user = user.get({plain: true});
         }
 
         return user;

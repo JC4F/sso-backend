@@ -71,6 +71,12 @@
             localStorage.setItem('clientURL', $('#redirectURL').val());
             window.location.href = '/auth/google';
         });
+        
+        $('#iconFacebook').on('click',()=>{
+            localStorage.removeItem('clientURL');
+            localStorage.setItem('clientURL', $('#redirectURL').val());
+            window.location.href = '/auth/facebook';
+        });
     })
 </script>
 
