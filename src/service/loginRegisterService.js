@@ -88,7 +88,8 @@ const handleUserLogin = async (rawData) => {
                 [Op.or]: [
                     { email: rawData.valueLogin },
                     { phone: rawData.valueLogin }
-                ]
+                ],
+                type: 'LOCAL'
             }
         })
 
@@ -202,7 +203,7 @@ const updateUserCode = async(code, email) => {
         let a = await db.User.update(
             {code: code},
             {
-                where: {email: email.trim()}
+                where: {email: email.trim(), type: 'LOCAL'}
             }
         );
     }catch(err){
@@ -210,8 +211,45 @@ const updateUserCode = async(code, email) => {
     }
 }
 
+const isEmailLocal = async(email) => {
+    try {
+        let user = await db.User.findOne({
+            where: {email: email.trim(), type: 'LOCAL'}
+        })
+        if(user){
+            return true;
+        } else return false;
+    } catch (error) {
+        return false;
+    }
+}
+
+const resetUserPassword = async(rawData) => {
+    try {
+        let newPaswword = hashUserPassword(rawData.newPassword);
+        let count = await db.User.update(
+            {password: newPaswword},
+            {
+                where: {
+                    email: rawData.email,
+                    type: 'LOCAL',
+                    code: rawData.code
+                }
+            }
+        )
+
+        if(count && count[0] > 0){
+            return true;
+        }
+        return false;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+
 module.exports = {
     registerNewUser, handleUserLogin, hashUserPassword, checkEmailExist, 
     checkPhoneExist, updateUserRefreshToken, upsertSocialMedia, getUserByRefreshToken,
-    updateUserCode
+    updateUserCode, isEmailLocal, resetUserPassword
 }
